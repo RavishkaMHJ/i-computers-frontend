@@ -1,6 +1,51 @@
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import toast from "react-hot-toast";
 
 export default function LoginPage() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+
+  //function login() {
+  //  axios
+  //    .post("http://localhost:3000/users/login", {
+  //      email: email,
+  //      password: password,
+  //    })
+  //    .then((response) => {
+  //      console.log(response);
+  //    })
+  //    .catch((error) => {
+  //      console.log(error);
+  //    });
+  //}
+
+  async function login() {
+    try {
+      const response = await axios.post(
+        import.meta.env.VITE_API_URL + "/users/login",
+        {
+          email: email,
+          password: password,
+        }
+      );
+      console.log(response);
+
+      if (response.data.role == "admin") {
+        navigate("/admin");
+      } else {
+        navigate("/");
+      }
+
+      toast.success("Login Succesfully");
+    } catch (error) {
+      console.log(error);
+      toast.error("Login Failed");
+    }
+  }
+
   return (
     <div className="w-full h-screen bg-[url('/backgroundimg.jpg')] bg-cover bg-center relative flex overflow-hidden">
       <div className="absolute inset-0 bg-linear-to-br from-black/80 via-black/70 to-secondary/60"></div>
@@ -36,12 +81,18 @@ export default function LoginPage() {
               <input
                 type="email"
                 placeholder="Email address"
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                }}
                 className="w-full h-11 px-5 mb-2 rounded-[10px] bg-white/20 text-primary placeholder:text-primary outline-none border border-transparent focus:border-accent focus:ring-2 focus:ring-accent/40 transition"
               />
 
               <input
                 type="password"
                 placeholder="Password"
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                }}
                 className="w-full h-11 px-5 mb-2 rounded-[10px] bg-white/20 text-primary placeholder:text-primary outline-none border border-transparent focus:border-accent focus:ring-2 focus:ring-accent/40 transition"
               />
 
@@ -55,7 +106,10 @@ export default function LoginPage() {
                 </Link>
               </p>
 
-              <button className="w-full h-[42px] rounded-[10px] bg-accent text-white font-semibold tracking-wide shadow-[0_10px_30px_rgba(2,169,247,0.45)] hover:brightness-110 active:scale-[0.98] transition mb-4">
+              <button
+                onClick={login}
+                className="w-full h-[42px] rounded-[10px] bg-accent text-white font-semibold tracking-wide shadow-[0_10px_30px_rgba(2,169,247,0.45)] hover:brightness-110 active:scale-[0.98] transition mb-4"
+              >
                 Login
               </button>
 
