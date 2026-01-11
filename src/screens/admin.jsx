@@ -7,6 +7,8 @@ import {
   MdOutlineInventory2,
 } from "react-icons/md";
 import { Link, Route, Routes } from "react-router-dom";
+import AdminProductsPage from "./Admin/adminProducts.jsx";
+import AdminAddProductPage from "./Admin/adminAddProduct.jsx";
 
 export default function AdminPage() {
   return (
@@ -84,12 +86,12 @@ export default function AdminPage() {
               </div>
             </div>
           </div>
-          <div className="w-full h-[calc(100%-56px)] bg-white/50 rounded-[7px] p-6">
+          <div className="w-full h-[calc(100%-56px)] bg-white/50 rounded-[7px] p-2">
             <Routes>
               <Route path="/*" element={<h1>Orders</h1>} />
-              <Route path="/products" element={<h1>Products</h1>} />
+              <Route path="/products" element={<AdminProductsPage />} />
               <Route path="/users" element={<h1>users</h1>} />
-              <Route path="/add-product" element={<h1>Add Product</h1>} />
+              <Route path="/add-product" element={<AdminAddProductPage />} />
             </Routes>
           </div>
         </div>

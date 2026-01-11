@@ -32,14 +32,15 @@ export default function LoginPage() {
         }
       );
       console.log(response);
+      toast.success("Login Succesfully");
+
+      localStorage.setItem("token", response.data.token);
 
       if (response.data.role == "admin") {
         navigate("/admin");
       } else {
         navigate("/");
       }
-
-      toast.success("Login Succesfully");
     } catch (error) {
       console.log(error);
       toast.error("Login Failed");
