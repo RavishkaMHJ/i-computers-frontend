@@ -1,4 +1,7 @@
+import axios from "axios";
 import { useState } from "react";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 export default function AdminAddProductPage() {
   const [productId, setProductId] = useState("");
@@ -11,9 +14,51 @@ export default function AdminAddProductPage() {
   const [brand, setBrand] = useState("Generic");
   const [model, setModel] = useState("Standard");
   const [isVisible, setIsVisible] = useState(true);
+  const navigate = useNavigate();
+
+  async function AddProduct() {
+    try {
+      const token = localStorage.getItem("token");
+
+      if (token == null) {
+        toast.error("You must loggin in to Add Product");
+        window.location.href("/login");
+        return;
+      }
+
+      await axios.post(
+        import.meta.env.VITE_API_URL + "/products",
+        {
+          productId: productId,
+          name: name,
+          description: description,
+          altNames: altNames.split(","),
+          price: price,
+          labelPrice: labelPrice,
+          category: category,
+          brand: brand,
+          model: model,
+          isVisible: isVisible,
+        },
+        {
+          headers: {
+            Authorization: "Bearer " + token,
+          },
+        }
+      );
+      toast.success("Product added successfully");
+      navigate("/admin/products");
+    } catch (error) {
+      console.log(error);
+      toast.error(error?.response?.data?.message || "Failed to add product");
+    }
+  }
 
   return (
-    <div className="w-full max-h-full flex flex-wrap p-2 gap-2 tracking-[1px]">
+    <div className="w-full max-h-full flex flex-wrap px-2.5 gap-2 tracking-[1px] overflow-y-scroll hide-scroll-track">
+      <span className="font-bold text-[25px] sticky top-0 px-3 py-2 rounded-tr-[7px] rounded-tl-[7px] bg-white w-full">
+        Add New Product
+      </span>
       <div className="w-full flex gap-3">
         <div className="w-[50%] h-[90px] flex flex-col gap-2">
           <label className="text-[15px] font-bold ml-2">Product ID </label>
@@ -159,6 +204,17 @@ export default function AdminAddProductPage() {
             <option value={false}>No</option>
           </select>
         </div>
+      </div>
+      <div className="w-full h-[55px] sticky bottom-0 px-3 py-2 rounded-br-[7px] items-center justify-end rounded-bl-[7px] bg-white flex gap-3">
+        <button className="bg-secondary/30 hover:bg-secondary/20 w-[100px] h-10 rounded-[7px] text-[18px] text-white font-semibold cursor-pointer">
+          Cancel
+        </button>
+        <button
+          onClick={AddProduct}
+          className="bg-accent hover:bg-accent/90 w-[150px] h-10 rounded-[7px] text-[18px] text-white font-semibold cursor-pointer outline-none"
+        >
+          Add Product
+        </button>
       </div>
     </div>
   );
