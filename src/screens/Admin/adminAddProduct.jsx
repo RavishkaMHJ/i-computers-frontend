@@ -2,6 +2,7 @@ import axios from "axios";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import uploadFile from "../../Utils/mediaUpload";
 
 export default function AdminAddProductPage() {
   const [productId, setProductId] = useState("");
@@ -14,6 +15,8 @@ export default function AdminAddProductPage() {
   const [brand, setBrand] = useState("Generic");
   const [model, setModel] = useState("Standard");
   const [isVisible, setIsVisible] = useState(true);
+  const [files, setFiles] = useState([]);
+
   const navigate = useNavigate();
 
   async function AddProduct() {
@@ -25,6 +28,14 @@ export default function AdminAddProductPage() {
         window.location.href("/login");
         return;
       }
+
+      const fileUploadPromises = [];
+
+      for (let i = 0; i < files.length; i++) {
+        fileUploadPromises[i] = uploadFile(files[i]);
+      }
+
+      const imageURLs = await Promise.all(fileUploadPromises);
 
       await axios.post(
         import.meta.env.VITE_API_URL + "/products",
@@ -39,6 +50,7 @@ export default function AdminAddProductPage() {
           brand: brand,
           model: model,
           isVisible: isVisible,
+          images: imageURLs,
         },
         {
           headers: {
@@ -115,7 +127,7 @@ export default function AdminAddProductPage() {
       </div>
 
       <div className="w-full flex gap-3">
-        <div className="w-[50%] h-[90px] flex flex-col gap-2">
+        <div className="w-[35%] h-[90px] flex flex-col gap-2">
           <label className="text-[15px] font-bold ml-2">Price </label>
           <input
             value={price}
@@ -127,7 +139,7 @@ export default function AdminAddProductPage() {
             className="border-2 border-accent rounded-[7px] h-[50px] p-2 focus:outline-none text-[13px]"
           ></input>
         </div>
-        <div className="w-[50%] h-[90px] flex flex-col gap-2">
+        <div className="w-[35%] h-[90px] flex flex-col gap-2">
           <label className="text-[15px] font-bold ml-2">Labled Price </label>
           <input
             value={labelPrice}
@@ -137,6 +149,17 @@ export default function AdminAddProductPage() {
             type="number"
             placeholder="Ex: 6000"
             className="border-2 border-accent rounded-[7px] h-[50px] p-2 focus:outline-none text-[13px]"
+          ></input>
+        </div>
+        <div className="w-[30%] h-[90px] flex flex-col gap-2">
+          <label className="text-[15px] font-bold ml-2">Images </label>
+          <input
+            multiple
+            type="file"
+            onChange={(e) => {
+              setFiles(e.target.files);
+            }}
+            className="border-2 border-accent rounded-[7px] h-[50px] p-2 focus:outline-none text-[13px] cursor-pointer"
           ></input>
         </div>
       </div>
