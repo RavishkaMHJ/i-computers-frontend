@@ -3,7 +3,10 @@ import { FaPlus } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import getFormatedPrice from "../../Utils/price-format";
 import axios from "axios";
-import { CiEdit, CiTrash } from "react-icons/ci";
+import { AiOutlineEdit } from "react-icons/ai";
+import { LuTrash2 } from "react-icons/lu";
+import toast from "react-hot-toast";
+import DeleteModel from "../../components/deleteModel";
 
 const sampleProducts = [
   {
@@ -101,24 +104,28 @@ const sampleProducts = [
 
 export default function AdminProductsPage() {
   const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    if (loading) {
+      const token = localStorage.getItem("token");
 
-    axios
-      .get(import.meta.env.VITE_API_URL + "/products", {
-        headers: {
-          Authorization: "Bearer " + token,
-        },
-      })
-      .then((response) => {
-        setProducts(response.data);
-        console.log(response.data);
-      });
-  }, []);
+      axios
+        .get(import.meta.env.VITE_API_URL + "/products", {
+          headers: {
+            Authorization: "Bearer " + token,
+          },
+        })
+        .then((response) => {
+          setProducts(response.data);
+          setLoading(false);
+          console.log(response.data);
+        });
+    }
+  }, [loading]);
 
   return (
-    <div className="w-full h-full overflow-y-scroll hide-scroll-track flex p-2 flex-col">
+    <div className="w-full h-full overflow-y-scroll hide-scroll-track overflow-x-scroll flex p-2 flex-col">
       <div className="flex items-center justify-between gap-3 px-5 py-4 bg-primary border-b border-secondary/10 rounded-tr-[7px] rounded-tl-[7px]">
         <div>
           <h2 className="text-lg font-semibold text-secondary tracking-[1px]">
@@ -133,114 +140,128 @@ export default function AdminProductsPage() {
           {products?.length ?? 0} items
         </span>
       </div>
-
-      <table className="min-w-[1100px] w-full text-sm relative">
-        <thead className="sticky top-0 z-10 bg-white">
-          <tr className="border-b border-secondary/10">
-            <th className="px-5 py-3  text-center text-xs font-semibold uppercase tracking-wide text-secondary/70">
-              Product ID
-            </th>
-            <th className="px-5 py-3 text-center text-xs font-semibold uppercase tracking-tight text-secondary/70">
-              Name
-            </th>
-            <th className="px-5 py-3 text-center text-xs font-semibold uppercase tracking-wide text-secondary/70">
-              Price
-            </th>
-            <th className="px-5 py-3 text-center text-xs font-semibold uppercase tracking-wide text-secondary/70">
-              Labelled
-            </th>
-            <th className="px-5 py-3 text-center text-xs font-semibold uppercase tracking-wide text-secondary/70">
-              Category
-            </th>
-            <th className="px-5 py-3 text-center text-xs font-semibold uppercase tracking-wide text-secondary/70">
-              Image
-            </th>
-            <th className="px-5 py-3 text-center text-xs font-semibold uppercase tracking-wide text-secondary/70">
-              Visibility
-            </th>
-            <th className="px-5 py-3 text-center text-xs font-semibold uppercase tracking-wide text-secondary/70">
-              Brand
-            </th>
-            <th className="px-5 py-3 text-center text-xs font-semibold uppercase tracking-wide text-secondary/70">
-              Model
-            </th>
-          </tr>
-        </thead>
-
-        <tbody className="divide-y divide-secondary/10">
-          {products.map((item) => (
-            <tr
-              key={item.productId}
-              className=" even:bg-white hover:bg-primary/50 transition-colors"
-            >
-              <td className="px-5 py-4 font-medium text-secondary whitespace-nowrap">
-                {item.productId}
-              </td>
-
-              <td className="px-5 py-4">
-                <div className="flex flex-col">
-                  <span className="font-semibold text-secondary">
-                    {item.name}
-                  </span>
-                  <span className="text-xs text-secondary/60">
-                    {item.category || "Uncategorized"}
-                  </span>
-                </div>
-              </td>
-
-              <td className="px-5 py-4 font-semibold text-secondary whitespace-nowrap">
-                {getFormatedPrice(item.price)}
-              </td>
-
-              <td className="px-5 py-4 text-secondary/80 whitespace-nowrap">
-                {getFormatedPrice(item.labledPrice)}
-              </td>
-
-              <td className="px-5 py-4">
-                <span className="flex items-center justify-center rounded-full bg-secondary/5 px-3 py-1 text-xs font-medium text-secondary">
-                  {item.category}
-                </span>
-              </td>
-
-              <td className="px-5 py-4">
-                <div className="flex items-center gap-3">
-                  <img
-                    src={item.images?.[0]}
-                    alt={item.name}
-                    className="h-12 w-12 rounded-xl object-cover ring-1 ring-secondary/10 shadow-sm bg-primary"
-                    loading="lazy"
-                  />
-                  <span className="text-xs text-secondary/60 hidden sm:inline">
-                    Main image
-                  </span>
-                </div>
-              </td>
-
-              <td className="px-5 py-4">
-                {item.isVisible ? (
-                  <span className="flex items-center justify-center gap-2 rounded-full bg-accent/15 px-3 py-1 text-xs font-semibold text-secondary">
-                    <span className="h-2 w-2 rounded-full bg-accent" />
-                    Visible
-                  </span>
-                ) : (
-                  <span className="flex items-center justify-center gap-2 rounded-full bg-secondary/10 px-3 py-1 text-xs font-semibold text-secondary/80">
-                    <span className="h-2 w-2 rounded-full bg-secondary/40" />
-                    Hidden
-                  </span>
-                )}
-              </td>
-
-              <td className="px-5 py-4 text-secondary whitespace-nowrap">
-                {item.brand}
-              </td>
-
-              <td className="px-5 py-4 text-secondary whitespace-nowrap">
-                {item.model}
-              </td>
+      {loading ? (
+        <h1>Loading...</h1>
+      ) : (
+        <table className="min-w-[1100px] w-full text-sm relative">
+          <thead className="sticky top-0 z-10 bg-white">
+            <tr className="border-b border-secondary/10">
+              <th className="px-5 py-3  text-center text-xs font-semibold uppercase tracking-wide text-secondary/70">
+                Product ID
+              </th>
+              <th className="px-5 py-3 text-center text-xs font-semibold uppercase tracking-tight text-secondary/70">
+                Name
+              </th>
+              <th className="px-5 py-3 text-center text-xs font-semibold uppercase tracking-wide text-secondary/70">
+                Price
+              </th>
+              <th className="px-5 py-3 text-center text-xs font-semibold uppercase tracking-wide text-secondary/70">
+                Labeled
+              </th>
+              <th className="px-5 py-3 text-center text-xs font-semibold uppercase tracking-wide text-secondary/70">
+                Category
+              </th>
+              <th className="px-5 py-3 text-center text-xs font-semibold uppercase tracking-wide text-secondary/70">
+                Image
+              </th>
+              <th className="px-5 py-3 text-center text-xs font-semibold uppercase tracking-wide text-secondary/70">
+                Visibility
+              </th>
+              <th className="px-5 py-3 text-center text-xs font-semibold uppercase tracking-wide text-secondary/70">
+                Brand
+              </th>
+              <th className="px-5 py-3 text-center text-xs font-semibold uppercase tracking-wide text-secondary/70">
+                Model
+              </th>
+              <th className="px-5 py-3 text-center text-xs font-semibold uppercase tracking-wide text-secondary/70">
+                Actions
+              </th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+
+          <tbody className="divide-y divide-secondary/10">
+            {products.map((item) => (
+              <tr
+                key={item.productId}
+                className=" even:bg-white hover:bg-primary/50 transition-colors"
+              >
+                <td className="px-5 py-4 font-medium text-secondary whitespace-nowrap text-center text-[12px]">
+                  {item.productId}
+                </td>
+
+                <td className="px-5 py-4">
+                  <div className="flex flex-col">
+                    <span className="font-semibold text-secondary text-center text-[12px]">
+                      {item.name}
+                    </span>
+                    <span className="text-xs text-secondary/60 text-center">
+                      {item.category || "Uncategorized"}
+                    </span>
+                  </div>
+                </td>
+
+                <td
+                  className="px-5 py-4 font-semibold text-secondary whitespace-nowrap text-[12px]"
+                  text-center
+                >
+                  {getFormatedPrice(item.price)}
+                </td>
+
+                <td className="px-5 py-4 text-secondary/80 whitespace-nowrap text-center text-[12px]">
+                  {getFormatedPrice(item.labledPrice)}
+                </td>
+
+                <td className="px-5 py-4">
+                  <span className="flex items-center justify-center rounded-full bg-secondary/5 px-3 py-1 text-xs font-medium text-secondary text-center text-[12px]">
+                    {item.category}
+                  </span>
+                </td>
+
+                <td className="px-5 py-4">
+                  <div className="flex items-center justify-center gap-3">
+                    <img
+                      src={item.images?.[0]}
+                      alt={item.name}
+                      className="h-12 w-12 rounded-xl object-cover ring-1 ring-secondary/10 shadow-sm bg-primary"
+                      loading="lazy"
+                    />
+                  </div>
+                </td>
+
+                <td className="px-5 py-4">
+                  {item.isVisible ? (
+                    <span className="flex items-center justify-center gap-2 rounded-full bg-accent/15 px-3 py-1 text-xs font-semibold text-secondary text-center text-[12px]">
+                      <span className="h-2 w-2 rounded-full bg-accent" />
+                      Visible
+                    </span>
+                  ) : (
+                    <span className="flex items-center justify-center gap-2 rounded-full bg-secondary/10 px-3 py-1 text-xs font-semibold text-secondary/80 text-center text-[12px]">
+                      <span className="h-2 w-2 rounded-full bg-secondary/40" />
+                      Hidden
+                    </span>
+                  )}
+                </td>
+
+                <td className="px-5 py-4 text-secondary whitespace-nowrap text-center text-[12px]">
+                  {item.brand}
+                </td>
+
+                <td className="px-5 py-4 text-secondary whitespace-nowrap text-center text-[12px]">
+                  {item.model}
+                </td>
+                <td className="px-5 py-4 text-secondary whitespace-nowrap text-center ">
+                  <div className="flex justify-center items-center gap-3 text-[20px]">
+                    <Link to="/admin/update-product" state={item}>
+                      <AiOutlineEdit className="cursor-pointer hover:text-accent" />
+                    </Link>
+                    <DeleteModel product={item} setLoading={setLoading} />
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
 
       <div className="px-5 py-3 bg-white border-t border-secondary/10 text-xs text-secondary/60">
         Tip: Scroll horizontally on small screens to view all columns.

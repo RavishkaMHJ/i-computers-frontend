@@ -1,25 +1,28 @@
 import axios from "axios";
 import { useState } from "react";
 import toast from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import uploadFile from "../../Utils/mediaUpload";
 
-export default function AdminAddProductPage() {
-  const [productId, setProductId] = useState("");
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
-  const [altNames, setAltNames] = useState("");
-  const [price, setPrice] = useState("");
-  const [labeledPrice, setLabeldPrice] = useState("");
-  const [category, setCategory] = useState("others");
-  const [brand, setBrand] = useState("Generic");
-  const [model, setModel] = useState("Standard");
-  const [isVisible, setIsVisible] = useState(true);
+export default function AdminUpdateProductPage() {
+  const location = useLocation();
+  const [productId, setProductId] = useState(location.state.productId);
+  const [name, setName] = useState(location.state.name);
+  const [description, setDescription] = useState(location.state.description);
+  const [altNames, setAltNames] = useState(location.state.altNames.join(","));
+  const [price, setPrice] = useState(location.state.price);
+  const [labeledPrice, setLabeldPrice] = useState(location.state.labledPrice);
+  const [category, setCategory] = useState(location.state.category);
+  const [brand, setBrand] = useState(location.state.brand);
+  const [model, setModel] = useState(location.state.model);
+  const [isVisible, setIsVisible] = useState(location.state.isVisible);
   const [files, setFiles] = useState([]);
 
   const navigate = useNavigate();
 
-  async function AddProduct() {
+  console.log(location);
+
+  async function UpdateProduct() {
     try {
       const token = localStorage.getItem("token");
 
@@ -35,10 +38,14 @@ export default function AdminAddProductPage() {
         fileUploadPromises[i] = uploadFile(files[i]);
       }
 
-      const imageURLs = await Promise.all(fileUploadPromises);
+      let imageURLs = await Promise.all(fileUploadPromises);
 
-      await axios.post(
-        import.meta.env.VITE_API_URL + "/products",
+      if (imageURLs.length == 0) {
+        imageURLs = location.state.images;
+      }
+
+      await axios.put(
+        import.meta.env.VITE_API_URL + "/products/" + productId,
         {
           productId: productId,
           name: name,
@@ -58,23 +65,24 @@ export default function AdminAddProductPage() {
           },
         }
       );
-      toast.success("Product added successfully");
+      toast.success("Product Updated successfully");
       navigate("/admin/products");
     } catch (error) {
       console.log(error);
-      toast.error(error?.response?.data?.message || "Failed to add product");
+      toast.error(error?.response?.data?.message || "Failed to Update product");
     }
   }
 
   return (
     <div className="w-full max-h-full flex flex-wrap px-2.5 gap-2 tracking-[1px] overflow-y-scroll hide-scroll-track">
       <span className="font-bold text-[25px] sticky top-0 px-3 py-2 rounded-tr-[7px] rounded-tl-[7px] bg-white w-full">
-        Add New Product
+        Update Product
       </span>
       <div className="w-full flex gap-3">
         <div className="w-[50%] h-[90px] flex flex-col gap-2">
           <label className="text-[15px] font-bold ml-2">Product ID </label>
           <input
+            disabled
             value={productId}
             onChange={(e) => {
               setProductId(e.target.value);
@@ -233,10 +241,10 @@ export default function AdminAddProductPage() {
           Cancel
         </button>
         <button
-          onClick={AddProduct}
-          className="bg-accent hover:bg-accent/90 w-[150px] h-10 rounded-[7px] text-[18px] text-white font-semibold cursor-pointer outline-none"
+          onClick={UpdateProduct}
+          className="bg-accent hover:bg-accent/90 w-[162px] h-10 rounded-[7px] text-[18px] text-white font-semibold cursor-pointer outline-none"
         >
-          Add Product
+          Update Product
         </button>
       </div>
     </div>
