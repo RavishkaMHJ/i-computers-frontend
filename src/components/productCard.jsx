@@ -5,12 +5,12 @@ export default function ProductCard(props) {
   const product = props.product;
   return (
     <Link to={"/overview/" + product.productId}>
-      <div className="bg-white rounded-[13px] w-[300px] h-[500px] shadow-lg m-4">
+      <div className="bg-white rounded-[13px] w-[300px] h-[500px] shadow-lg m-4 hover:shadow-sm hover:shadow-gray-200">
         <div className="bg-white flex justify-center items-center">
           <img
             src={product.images[0]}
             alt={product.name}
-            className="w-[280px] h-[250px] object-contain rounded-t-2xl transition-transform duration-300 group-hover:scale-105"
+            className="w-[280px] h-[250px] object-contain rounded-t-2xl transition-transform duration-300"
           />
         </div>
 
@@ -52,7 +52,7 @@ export default function ProductCard(props) {
 
           <div className="flex justify-end items-center">
             <button className="px-6 py-2 bg-linear-to-br from-accent/80 via-black/70 to-accent/60 text-white rounded-lg hover:bg-accent/80 transition cursor-pointer">
-              Buy Now
+              Click Here
             </button>
           </div>
         </div>

@@ -1,3 +1,5 @@
+import { BiShoppingBag } from "react-icons/bi";
+import { FaRegUser } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
 export default function Header() {
@@ -26,6 +28,12 @@ export default function Header() {
           Contact
         </Link>
       </div>
+      <Link to="/cart" className="mx-4 absolute right-20 cursor-pointer">
+        <BiShoppingBag size={30} color="white" />
+      </Link>
+      <Link to="/login" className="mx-4 absolute right-10 cursor-pointer">
+        <FaRegUser size={25} color="white" />
+      </Link>
     </header>
   );
 }

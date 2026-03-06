@@ -4,6 +4,7 @@ import toast from "react-hot-toast";
 import { useParams } from "react-router-dom";
 import ImageSlideShow from "../components/imageSlideShow";
 import getFormatedPrice from "../Utils/price-format";
+import { addToCart, getCart } from "../Utils/cart";
 
 export default function ProductOverView() {
   const parms = useParams();
@@ -61,10 +62,21 @@ export default function ProductOverView() {
             )}
             <p className="text-md mb-4">{product.description}</p>
             <div className="w-full h-[100px] flex justify-start items-center text-white font-bold text-2xl">
-              <button className="px-6 py-2 bg-linear-to-br from-emerald-500 via-green-600 to-emerald-700 text-white rounded-lg hover:bg-green-700 cursor-pointer transition-transform duration-500 hover:scale-105 hover:shadow-sm hover:shadow-green-500">
+              <button
+                onClick={() => {
+                  addToCart(product, 1);
+                  toast.success(product.name + "added to cart");
+                }}
+                className="px-6 py-3 bg-linear-to-br from-emerald-500 via-green-600 to-emerald-700 text-white rounded-lg hover:bg-green-700 cursor-pointer transition-transform duration-500 hover:scale-105 hover:shadow-sm hover:shadow-green-500"
+              >
                 Add To Cart
               </button>
-              <button className="px-6 py-2 ml-4 bg-linear-to-br from-accent/80 via-black/80 to-accent/60 text-white rounded-lg hover:bg-accent/80 cursor-pointer transition-transform duration-500 hover:scale-105 hover:shadow-sm hover:shadow-accent/30">
+              <button
+                onClick={() => {
+                  console.log(getCart());
+                }}
+                className="px-6 py-3 ml-4 bg-linear-to-br from-accent/80 via-black/80 to-accent/60 text-white rounded-lg hover:bg-accent/80 cursor-pointer transition-transform duration-500 hover:scale-105 hover:shadow-sm hover:shadow-accent/30"
+              >
                 Buy Now
               </button>
             </div>
