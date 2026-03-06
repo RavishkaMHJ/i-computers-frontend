@@ -55,7 +55,7 @@ export default function LoginPage() {
       <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-accent/10 blur-[100px] rounded-full"></div>
 
       <div className="w-full h-full flex justify-center items-center">
-        <div className="w-[60%] h-[65%] z-100 bg-accent/10 flex justify-center items-center rounded-xl border border-primary/20 p-3">
+        <div className="w-[60%] h-[70%] z-100 bg-accent/10 flex justify-center items-center rounded-xl border border-primary/20 p-3">
           <div className="w-[50%] h-full flex flex-col justify-center items-cente p-3 text-center">
             <img
               src="/logo.png"
@@ -85,7 +85,7 @@ export default function LoginPage() {
                 onChange={(e) => {
                   setEmail(e.target.value);
                 }}
-                className="w-full h-11 px-5 mb-2 rounded-[10px] bg-white/20 text-primary placeholder:text-primary outline-none border border-transparent focus:border-accent focus:ring-2 focus:ring-accent/40 transition"
+                className="w-full h-11 px-5 mb-3 rounded-[10px] bg-white/20 text-primary placeholder:text-primary outline-none border border-transparent focus:border-accent focus:ring-2 focus:ring-accent/40 transition"
               />
 
               <input
@@ -94,7 +94,7 @@ export default function LoginPage() {
                 onChange={(e) => {
                   setPassword(e.target.value);
                 }}
-                className="w-full h-11 px-5 mb-2 rounded-[10px] bg-white/20 text-primary placeholder:text-primary outline-none border border-transparent focus:border-accent focus:ring-2 focus:ring-accent/40 transition"
+                className="w-full h-11 px-5 mb-3 rounded-[10px] bg-white/20 text-primary placeholder:text-primary outline-none border border-transparent focus:border-accent focus:ring-2 focus:ring-accent/40 transition"
               />
 
               <p className="text-right text-sm text-primary mb-6">

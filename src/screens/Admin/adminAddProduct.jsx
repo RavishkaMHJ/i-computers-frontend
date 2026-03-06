@@ -45,7 +45,7 @@ export default function AdminAddProductPage() {
           description: description,
           altNames: altNames.split(","),
           price: price,
-          labelPrice: labeledPrice,
+          labeledPrice: labeledPrice,
           category: category,
           brand: brand,
           model: model,

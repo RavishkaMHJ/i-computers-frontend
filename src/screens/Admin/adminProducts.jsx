@@ -8,100 +8,6 @@ import { LuTrash2 } from "react-icons/lu";
 import toast from "react-hot-toast";
 import DeleteModel from "../../components/deleteModel";
 
-const sampleProducts = [
-  {
-    productId: "p001",
-    name: "Wireless Headphones",
-    description: "Noise-cancelling over-ear wireless headphones",
-    price: 12999,
-    labledPrice: 13500,
-    category: "Electronics",
-    brand: "SoundMax",
-    stock: 45,
-    image: "/images/products/headphones.jpg",
-    isVisible: true,
-    model: "G7834H",
-  },
-  {
-    productId: "p002",
-    name: "Smart Watch",
-    description: "Fitness tracking smart watch with heart rate monitor",
-    price: 8900,
-    labledPrice: 9200,
-    category: "Wearables",
-    brand: "FitPro",
-    stock: 30,
-    image: "/images/products/smartwatch.jpg",
-    isVisible: true,
-    model: "D7834R",
-  },
-  {
-    productId: "p003",
-    name: "Gaming Mouse",
-    description: "RGB wired gaming mouse with adjustable DPI",
-    price: 3999,
-    labledPrice: 4500,
-    category: "Accessories",
-    brand: "GameX",
-    stock: 60,
-    image: "/images/products/mouse.jpg",
-    isVisible: true,
-    model: "DT6834H",
-  },
-  {
-    productId: "p004",
-    name: "Laptop Backpack",
-    description: "Water-resistant backpack for 15-inch laptops",
-    price: 4999,
-    labledPrice: 5800,
-    category: "Bags",
-    brand: "UrbanCarry",
-    stock: 25,
-    image: "/images/products/backpack.jpg",
-    isVisible: true,
-    model: "G7M34M",
-  },
-  {
-    productId: "p005",
-    name: "Bluetooth Speaker",
-    description: "Portable Bluetooth speaker with deep bass",
-    price: 5950,
-    labledPrice: 6400,
-    category: "Electronics",
-    brand: "BeatBox",
-    stock: 40,
-    image: "/images/products/speaker.jpg",
-    isVisible: true,
-    model: "M6754A",
-  },
-  {
-    productId: "p006",
-    name: "Gaming Mouse",
-    description: "RGB wired gaming mouse with adjustable DPI",
-    price: 3999,
-    labledPrice: 4500,
-    category: "Accessories",
-    brand: "GameX",
-    stock: 60,
-    image: "/images/products/mouse.jpg",
-    isVisible: true,
-    model: "DT6834H",
-  },
-  {
-    productId: "p007",
-    name: "Gaming Mouse",
-    description: "RGB wired gaming mouse with adjustable DPI",
-    price: 3999,
-    labledPrice: 4500,
-    category: "Accessories",
-    brand: "GameX",
-    stock: 60,
-    image: "/images/products/mouse.jpg",
-    isVisible: true,
-    model: "DT6834H",
-  },
-];
-
 export default function AdminProductsPage() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -208,9 +114,8 @@ export default function AdminProductsPage() {
                 </td>
 
                 <td className="px-5 py-4 text-secondary/80 whitespace-nowrap text-center text-[12px]">
-                  {getFormatedPrice(item.labledPrice)}
+                  {getFormatedPrice(item.labeledPrice)}
                 </td>
-
                 <td className="px-5 py-4">
                   <span className="flex items-center justify-center rounded-full bg-secondary/5 px-3 py-1 text-xs font-medium text-secondary text-center text-[12px]">
                     {item.category}

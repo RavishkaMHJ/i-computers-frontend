@@ -11,7 +11,7 @@ export default function AdminUpdateProductPage() {
   const [description, setDescription] = useState(location.state.description);
   const [altNames, setAltNames] = useState(location.state.altNames.join(","));
   const [price, setPrice] = useState(location.state.price);
-  const [labeledPrice, setLabeldPrice] = useState(location.state.labledPrice);
+  const [labeledPrice, setLabeldPrice] = useState(location.state.labeledPrice);
   const [category, setCategory] = useState(location.state.category);
   const [brand, setBrand] = useState(location.state.brand);
   const [model, setModel] = useState(location.state.model);
@@ -52,7 +52,7 @@ export default function AdminUpdateProductPage() {
           description: description,
           altNames: altNames.split(","),
           price: price,
-          labelPrice: labeledPrice,
+          labeledPrice: labeledPrice,
           category: category,
           brand: brand,
           model: model,
