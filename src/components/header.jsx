@@ -4,36 +4,52 @@ import { Link } from "react-router-dom";
 
 export default function Header() {
   return (
-    <header className="w-full sticky top-0 bg-accent h-[100px] flex justify-center items-center">
-      <div className="absolute inset-0 bg-linear-to-br from-black/80 via-black/70 to-accent/60"></div>
-      <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-accent/10 blur-[100px] rounded-full"></div>
-
-      <div className="h-full w-[200px] flex justify-center items-center absolute left-10">
-        <img
-          src="/logo.png"
-          alt="Real PC Solutions h-[50px] object-cover z-100"
-        />
-      </div>
-      <div className="h-full flex justify-center items-center z-100">
-        <Link to="/" className="text-white mx-4 hover:border-b-2">
-          Home
+    <header className="w-full sticky top-0 backdrop-blur-xl h-[110px] flex flex-col justify-center items-center z-100">
+      <div className="w-full h-[45px] bg-accent flex justify-end items-center px-15 gap-3">
+        <Link
+          to="/login"
+          className="cursor-pointer text-white font-medium hover:border-b-2"
+        >
+          Login
         </Link>
-        <Link to="/products" className="text-white mx-4 hover:border-b-2">
-          Products
-        </Link>
-        <Link to="/about" className="text-white mx-4 hover:border-b-2">
-          About
-        </Link>
-        <Link to="/contact" className="text-white mx-4 hover:border-b-2">
-          Contact
+        <Link
+          to="/login"
+          className="cursor-pointer text-white font-medium hover:border-b-2"
+        >
+          Sign Up
         </Link>
       </div>
-      <Link to="/cart" className="mx-4 absolute right-20 cursor-pointer">
-        <BiShoppingBag size={30} color="white" />
-      </Link>
-      <Link to="/login" className="mx-4 absolute right-10 cursor-pointer">
-        <FaRegUser size={25} color="white" />
-      </Link>
+      <div className="w-full sticky top-0 backdrop-blur-xl bg-black/90 h-[65px] flex justify-center items-center z-100">
+        <div className="h-full w-[150px] flex justify-center items-center absolute left-10">
+          <img
+            src="/logo.png"
+            alt="Real PC Solutions h-[50px] object-cover z-100"
+          />
+        </div>
+        <div className="h-full flex justify-center text-[16px] font-medium items-center z-100">
+          <Link to="/" className="text-white mx-4 hover:border-b-2">
+            Home
+          </Link>
+          <Link to="/products" className="text-white mx-4 hover:border-b-2">
+            Products
+          </Link>
+          <a
+            href="/#about"
+            className="text-white mx-4 hover:border-b-2 cursor-pointer"
+          >
+            About
+          </a>
+          <a
+            href="/#contact"
+            className="text-white mx-4 hover:border-b-2 cursor-pointer"
+          >
+            Contact
+          </a>
+        </div>
+        <Link to="/cart" className="mx-6 absolute right-10 cursor-pointer">
+          <BiShoppingBag size={30} color="white" />
+        </Link>
+      </div>
     </header>
   );
 }

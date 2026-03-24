@@ -18,7 +18,7 @@ export default function ProductPage() {
   }, []);
 
   return (
-    <div className="w-full h-[calc(100vh-100px)] flex justify-center items-center flex-wrap">
+    <div className="w-full h-[calc(100vh-110px)] flex justify-center items-center flex-wrap py-3">
       {products.map((item) => (
         <ProductCard product={item} key={item.productId} />
       ))}

@@ -1,11 +1,18 @@
 import { useState } from "react";
-import { addToCart, getCart, getCartTotal } from "../Utils/cart";
+import { getCartTotal } from "../Utils/cart";
 import { BiMinus, BiPlus } from "react-icons/bi";
 import getFormatedPrice from "../Utils/price-format";
-import { Link } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
-export default function Cart() {
-  const [cart, setCart] = useState(getCart());
+export default function CheckOut() {
+  const location = useLocation();
+  const [cart, setCart] = useState(location.state || []);
+  const navigate = useNavigate();
+
+  if (location.state == null) {
+    navigate("/products");
+  }
+
   return (
     <div className="w-full h-[calc(100vh-110px)] overflow-y-scroll ">
       <div className="w-full flex justify-center items-center flex-col gap-4 p-5">
@@ -38,8 +45,12 @@ export default function Cart() {
                   <div className="w-[150px] h-[35px] border border-gray-500 rounded-full flex overflow-hidden">
                     <button
                       onClick={() => {
-                        addToCart(cartItem.product, -1);
-                        setCart(getCart());
+                        const newCart = [...cart];
+                        newCart[index].qty = newCart[index].qty - 1;
+                        if (newCart[index].qty <= 0) {
+                          newCart.splice(index, 1);
+                        }
+                        setCart(newCart);
                       }}
                       className="w-[70px] h-full cursor-pointer flex justify-center items-center  text-2xl font-bold text-gray-700 hover:bg-linear-to-br from-accent/80 via-black/70 to-accent/60 hover:text-white"
                     >
@@ -50,8 +61,9 @@ export default function Cart() {
                     </span>
                     <button
                       onClick={() => {
-                        addToCart(cartItem.product, +1);
-                        setCart(getCart());
+                        const newCart = [...cart];
+                        newCart[index].qty = newCart[index].qty + 1;
+                        setCart(newCart);
                       }}
                       className="w-[70px] h-full cursor-pointer flex justify-center items-center  text-2xl font-bold text-gray-700 hover:bg-linear-to-br from-accent/80 via-black/70 to-accent/60 hover:text-white"
                     >
@@ -75,13 +87,9 @@ export default function Cart() {
         })}
       </div>
       <div className="w-[200px] h-[150px] bg-white fixed bottom-5 right-6 flex flex-col justify-center items-center rounded-lg shadow overflow-hidden transition-transform duration-500 hover:scale-102 hover:shadow-sm hover:shadow-gray-300">
-        <Link
-          to="/checkout"
-          state={cart}
-          className="px-6 py-3 mb-3 bg-linear-to-br from-accent/80 via-black/80 to-accent/60 text-white rounded-lg hover:bg-accent/80 cursor-pointer transition-transform duration-500 hover:scale-105 hover:shadow-sm hover:shadow-accent/30"
-        >
-          Checkout
-        </Link>
+        <button className="px-6 py-3 mb-3 bg-linear-to-br from-accent/80 via-black/80 to-accent/60 text-white rounded-lg hover:bg-accent/80 cursor-pointer transition-transform duration-500 hover:scale-105 hover:shadow-sm hover:shadow-accent/30">
+          Buy Now
+        </button>
         <span className="font-bold mb-2 text-secondary tex-[14px] border-b-4 border-double">
           {getFormatedPrice(getCartTotal(cart))}
         </span>

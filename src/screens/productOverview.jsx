@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom";
 import ImageSlideShow from "../components/imageSlideShow";
 import getFormatedPrice from "../Utils/price-format";
 import { addToCart, getCart } from "../Utils/cart";
+import { Link } from "react-router-dom";
 
 export default function ProductOverView() {
   const parms = useParams();
@@ -24,7 +25,7 @@ export default function ProductOverView() {
   }, []);
 
   return (
-    <div className="w-full h-[calc(100vh-100px)] flex justify-center items-center">
+    <div className="w-full h-[calc(100vh-110px)] flex justify-center items-center">
       {product == null ? (
         <h1>loading...</h1>
       ) : (
@@ -71,14 +72,26 @@ export default function ProductOverView() {
               >
                 Add To Cart
               </button>
-              <button
-                onClick={() => {
-                  console.log(getCart());
-                }}
+              <Link
+                to="/checkout"
+                state={[
+                  {
+                    product: {
+                      productId: product.productId,
+                      name: product.name,
+                      model: product.model,
+                      brand: product.brand,
+                      labeledPrice: product.labeledPrice,
+                      price: product.price,
+                      image: product.images[0],
+                    },
+                    qty: 1,
+                  },
+                ]}
                 className="px-6 py-3 ml-4 bg-linear-to-br from-accent/80 via-black/80 to-accent/60 text-white rounded-lg hover:bg-accent/80 cursor-pointer transition-transform duration-500 hover:scale-105 hover:shadow-sm hover:shadow-accent/30"
               >
                 Buy Now
-              </button>
+              </Link>
             </div>
           </div>
         </div>

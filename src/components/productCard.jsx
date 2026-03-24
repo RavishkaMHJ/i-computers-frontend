@@ -3,57 +3,63 @@ import getFormatedPrice from "../Utils/price-format";
 
 export default function ProductCard(props) {
   const product = props.product;
+
   return (
     <Link to={"/overview/" + product.productId}>
-      <div className="bg-white rounded-[13px] w-[300px] h-[500px] shadow-lg m-4 hover:shadow-sm hover:shadow-gray-200">
-        <div className="bg-white flex justify-center items-center">
+      <div className="relative w-[280px] bg-[#fafafa] shadow-md hover:shadow-lg transition duration-300 m-4 rounded-md overflow-hidden">
+        <span className="absolute top-4 left-0 bg-red-500 text-white text-[11px] z-10 font-bold px-3 py-0.5 uppercase">
+          Sale
+        </span>
+
+        <div className="flex items-center justify-center h-[200px] bg-white p-6 relative group">
           <img
             src={product.images[0]}
             alt={product.name}
-            className="w-[280px] h-[250px] object-contain rounded-t-2xl transition-transform duration-300"
+            className="max-h-full max-w-full object-contain transition-opacity duration-500 group-hover:opacity-0"
           />
+
+          {product.images[1] && (
+            <img
+              src={product.images[1]}
+              alt={product.name}
+              className="max-h-full max-w-full object-contain absolute transition-opacity duration-500 opacity-0 group-hover:opacity-100"
+            />
+          )}
         </div>
 
-        <div className="p-6 w-full h-[250px]">
-          <div className="flex justify-between items-center mb-3">
-            <div>
-              <h3 className="text-lg font-semibold text-gray-900 hover:text-blue-600 cursor-pointer max-w-[150px] line-clamp-1">
-                {product.name}
-              </h3>
-              <p className="text-sm text-gray-500">{product.category}</p>
-            </div>
-            <div className="flex flex-col items-end">
-              <div className="flex text-yellow-400 mb-1"></div>
-              <p className="text-xs text-gray-400">Rated 4.0/5</p>
-            </div>
+        <div className="p-4 flex flex-col h-[180px]">
+          <div className="mb-2">
+            {product.altNames.slice(0, 2).map((altNames, index) => (
+              <span
+                key={index}
+                className="text-gray-400 text-[10px] uppercase font-semibold mr-1"
+              >
+                {altNames}
+                {index !== 1 && " |"}
+              </span>
+            ))}
           </div>
 
-          <hr className="border-gray-200 my-3" />
+          <h4 className="text-[14px] font-semibold text-gray-800 mb-2 uppercase line-clamp-1">
+            {product.name}
+          </h4>
 
-          <div className="flex justify-between items-center mb-4">
-            <div>
-              <p className="text-[11px] font-bold text-gray-400">
-                {product.model}
-              </p>
-            </div>
-            <div className="text-right">
-              <p className="text-lg font-semibold text-gray-800">
-                {getFormatedPrice(product.price)}
-              </p>
+          <p className="text-gray-500 text-[11px] line-clamp-2">
+            {product.description}
+          </p>
+
+          <div className="border-t mt-3 pt-3 flex items-center">
+            <div className="flex items-center gap-4">
               {product.labeledPrice > product.price && (
-                <p className="text-xs text-gray-400 line-through">
+                <span className="text-xs text-gray-400 line-through">
                   {getFormatedPrice(product.labeledPrice)}
-                </p>
+                </span>
               )}
+
+              <span className="text-[15px] font-semibold text-accent">
+                {getFormatedPrice(product.price)}
+              </span>
             </div>
-          </div>
-
-          <hr className="border-gray-200 mb-4" />
-
-          <div className="flex justify-end items-center">
-            <button className="px-6 py-2 bg-linear-to-br from-accent/80 via-black/70 to-accent/60 text-white rounded-lg hover:bg-accent/80 transition cursor-pointer">
-              Click Here
-            </button>
           </div>
         </div>
       </div>

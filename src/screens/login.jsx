@@ -29,7 +29,7 @@ export default function LoginPage() {
         {
           email: email,
           password: password,
-        }
+        },
       );
       console.log(response);
       toast.success("Login Succesfully");
